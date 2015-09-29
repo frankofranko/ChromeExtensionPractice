@@ -2,6 +2,7 @@ $(function() {
   // console.log("1");
     $('.search').change(function() {
       $('#history_div').empty();
+      $('#stat_table').empty();
       // console.log($('#start_time').val());
       // console.log($('#end_time').val());
       searchHistory($('#start_time').val(), $('#end_time').val());
@@ -15,6 +16,45 @@ function onAnchorClick(event) {
     url: event.srcElement.href
   });
   return false;
+}
+
+function URL2Domain(url) {
+  var domain;
+    //find & remove protocol (http, ftp, etc.) and get domain
+    if (url.indexOf("://") > -1) {
+        domain = url.split('/')[2];
+    }
+    else {
+        domain = url.split('/')[0];
+    }
+    //find & remove port number
+    domain = domain.split(':')[0];
+    return domain;
+}
+
+function dumpStatTable(historyItems) {
+  var dic = {};
+  for (var i = 0; i < historyItems.length; i++){
+    var domain_name = URL2Domain(historyItems[i].url)
+    if(dic[domain_name]===undefined) {
+      dic[domain_name] = 1;
+    }
+    else {
+      dic[domain_name] +=1 ;
+    }
+  }
+  var table_name = 'stat_table';
+  var table = document.getElementById(table_name);
+  for (var key in dic) {
+    var tr = document.createElement('tr');
+    var td_domain = document.createElement('td');
+    td_domain.appendChild(document.createTextNode(key));
+    var td_count = document.createElement('td');
+    td_count.appendChild(document.createTextNode(dic[key]));
+    tr.appendChild(td_domain);
+    tr.appendChild(td_count);
+    table.appendChild(tr);
+  }
 }
 
 function dumpHistory(historyItems) {
@@ -37,6 +77,7 @@ function dumpHistory(historyItems) {
 }
 
 
+
 function searchHistory(num_of_start_days, num_of_end_days) {
   var start_day_in_milliseconds = Date.now() - num_of_start_days*1000*60*60*24;
   var end_day_in_milliseconds = Date.now() - num_of_end_days*1000*60*60*24;
@@ -46,7 +87,8 @@ function searchHistory(num_of_start_days, num_of_end_days) {
       'startTime': start_day_in_milliseconds,
       'endTime': end_day_in_milliseconds
       }, function(historyItems) {
-        console.log(historyItems);
+        // console.log(historyItems);
+        dumpStatTable(historyItems)
         dumpHistory(historyItems);
       });
 
