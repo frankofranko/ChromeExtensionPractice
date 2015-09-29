@@ -1,7 +1,21 @@
 body {
 	min-width: 500px;
+	background-color: #D7CCC8;
 }
 
 input {
 	width: 50px;
+}
+
+table{
+    /*font-size: 13px;*/
+    font-family: Tahoma, Geneva, sans-serif;
+    border-spacing: 0px 1px;   
+}
+
+tr:nth-child(even) {background-color: #dfe1e7;}
+tr:nth-child(odd) {background-color: #eeeff2;}
+
+td:nth-child(1) {
+	padding-right: 20px;
 }
