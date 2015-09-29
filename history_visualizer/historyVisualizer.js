@@ -9,6 +9,14 @@ $(function() {
   });
 });
 
+function onAnchorClick(event) {
+  chrome.tabs.create({
+    selected: true,
+    url: event.srcElement.href
+  });
+  return false;
+}
+
 function dumpHistory(historyItems) {
   var div_name = 'history_div';
   var div = document.getElementById(div_name);
@@ -18,8 +26,11 @@ function dumpHistory(historyItems) {
       var a = document.createElement('a');
       a.href = historyItems[i].url;
       a.appendChild(document.createTextNode(historyItems[i].url));
-      // a.addEventListener('click', onAnchorClick);
+      a.addEventListener('click', onAnchorClick);
+      var title = document.createElement('p');
+      title.appendChild(document.createTextNode(historyItems[i].title));
       var li = document.createElement('li');
+      li.appendChild(title);
       li.appendChild(a);
       ul.appendChild(li);
     }
@@ -27,13 +38,13 @@ function dumpHistory(historyItems) {
 
 
 function searchHistory(num_of_start_days, num_of_end_days) {
-  var start_days_in_microseconds = num_of_start_days*1000*60*60*24;
-  var end_days_in_microseconds = num_of_end_days*1000*60*60*24;
+  var start_day_in_milliseconds = Date.now() - num_of_start_days*1000*60*60*24;
+  var end_day_in_milliseconds = Date.now() - num_of_end_days*1000*60*60*24;
 
   chrome.history.search({
       'text': '',              // Return every history item....
-      'startTime': start_days_in_microseconds,
-      'endTime': end_days_in_microseconds
+      'startTime': start_day_in_milliseconds,
+      'endTime': end_day_in_milliseconds
       }, function(historyItems) {
         console.log(historyItems);
         dumpHistory(historyItems);
