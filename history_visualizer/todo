@@ -1,0 +1,5 @@
+1. Add another search field to search for the end day.
+
+2. Make the history link open a new tab. It's not working now. Refer to the onAnchorClick function of typeUrl.js from history_demo.
+
+3. Add history titles into the results.

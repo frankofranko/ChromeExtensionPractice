@@ -20,7 +20,6 @@ function dumpHistory(historyItems) {
 	    // a.addEventListener('click', onAnchorClick);
 	    var li = document.createElement('li');
 	    li.appendChild(a);
-
 	    ul.appendChild(li);
   	}
 }
